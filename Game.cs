@@ -10,7 +10,7 @@ namespace SnakeC_
     {
         public void Start()
         {
-
+            Board board = new Board(40, 30);
         }
 
         private void Draw()
