@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,9 +21,26 @@ namespace SnakeC_
 
     public class Board
     {
-        public List<Point> Snake { get; } = new List<Point>();
+        private List<Point> SnakePosition { get; set; } = new List<Point>();
         public readonly int Width;
         public readonly int Height;
+
+        /// <summary>
+        /// Indexer to SnakePosition list
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public Point this[int index]
+        {
+            get
+            {
+                return SnakePosition[index];
+            }
+            set
+            {
+                SnakePosition[index] = value;
+            }
+        }
 
         public Board(int width, int height)
         {
@@ -31,7 +49,9 @@ namespace SnakeC_
             Console.SetWindowSize(Width, Height);
 
             //Spawn snake head
-            Snake.Add(new Point(Width / 2, Height / 2));
+            SnakePosition.Add(new Point(Width / 2, Height / 2));
         }
+
+        public int GetSnakePositionCount() => SnakePosition.Count;
     }
 }
