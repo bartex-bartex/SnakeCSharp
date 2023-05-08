@@ -20,8 +20,6 @@ namespace SnakeC_
 
         public void Draw(List<Point> snakePos, Point applePos)
         {
-            //Console.Clear();
-
             // Draw Boundaries
             Console.SetCursorPosition(0, 0);
             for (int i = 0; i < Width; i++)

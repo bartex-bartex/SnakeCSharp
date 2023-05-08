@@ -54,7 +54,7 @@ namespace SnakeC_
             }
 
             Messages.GameOverMessage(Board.Width, Board.Height, Score.points);
-            Console.ReadKey();
+            Console.ReadLine();
         }
     }
 }
