@@ -6,21 +6,9 @@ using System.Threading.Tasks;
 
 namespace SnakeC_
 {
-    public struct Point
-    {
-        public int x;
-        public int y;
-
-        public Point(int x, int y)
-        {
-            this.x = x;
-            this.y = y;
-        }
-    }
 
     public class Board
     {
-        public List<Point> Snake { get; } = new List<Point>();
         public readonly int Width;
         public readonly int Height;
 
@@ -28,10 +16,54 @@ namespace SnakeC_
         {
             Width = width;
             Height = height;
-            Console.SetWindowSize(Width, Height);
+        }
 
-            //Spawn snake head
-            Snake.Add(new Point(Width / 2, Height / 2));
+        public void Draw(List<Point> snakePos, Point applePos)
+        {
+            //Console.Clear();
+
+            // Draw Boundaries
+            Console.SetCursorPosition(0, 0);
+            for (int i = 0; i < Width; i++)
+            {
+                Console.Write("#");
+            }
+            Console.WriteLine();
+            for (int i = 0; i < Height - 2; i++)
+            {
+                Console.Write("#");
+                for (int j = 0; j < Width - 2; j++)
+                {
+                    Console.Write(" ");
+                }
+                Console.WriteLine("#");
+            }
+            for (int i = 0; i < Width; i++)
+            {
+                Console.Write("#");
+            }
+
+            // Draw Snake
+            for (int i = 0; i < snakePos.Count; i++)
+            {
+                Console.SetCursorPosition(snakePos[i].x, snakePos[i].y);
+                if(i == 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.Write("O");
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+                else
+                {
+                    Console.Write("o");
+                }
+            }
+
+            // Draw Apple
+            Console.SetCursorPosition(applePos.x, applePos.y);
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.Write("@");
+            Console.BackgroundColor = ConsoleColor.Black;
         }
     }
 }
