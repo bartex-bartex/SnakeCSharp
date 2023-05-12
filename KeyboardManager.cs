@@ -4,20 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SnakeC_
+namespace SnakeGame
 {
     public static class KeyboardManager
     {
-        public static Direction GetKey()
+        public static Direction GetDirection()
         {
             if (Console.KeyAvailable)
             {
-                ConsoleKeyInfo key = Console.ReadKey(true);
-
+                ConsoleKeyInfo pressedKey = Console.ReadKey(true);
 
                 ClearBuffer();
 
-                switch (key.Key)
+                switch (pressedKey.Key)
                 {
                     case ConsoleKey.D:
                     case ConsoleKey.RightArrow:
@@ -32,10 +31,10 @@ namespace SnakeC_
                     case ConsoleKey.UpArrow:
                         return Direction.up;
                     default:
-                        return Direction.previouskey;
+                        return Direction.previousDirection;
                 }
             }
-            return Direction.previouskey;
+            return Direction.previousDirection;
         }
 
         private static void ClearBuffer()

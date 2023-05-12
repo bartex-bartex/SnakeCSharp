@@ -4,56 +4,56 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SnakeC_
+namespace SnakeGame
 {
     public class Game
     {
-        // Normal name convention practice
         public Board Board { get; set; }
         public Snake Snake { get; set; }
         public Apple Apple { get; set; }
         public Score Score { get; set; }
+
+        private const int scoreTextHeight = 1;
+        private const int FPS = 16; 
 
 
         public Game(int width, int height)
         {
             Board = new Board(width, height);
             Snake = new Snake(width, height);
-            Apple = new Apple(width, height, Snake.SnakePos);
+            Apple = new Apple(width, height, Snake.Position);
             Score = new Score();
 
             Console.CursorVisible = false;
-            // Additional line for score
-            Console.SetWindowSize(width, height + 1);
+            Console.SetWindowSize(width, height + scoreTextHeight);
         }
 
         public void Start()
         {
             while (true)
             {
-                Board.Draw(Snake.SnakePos, Apple.Position);
+                Board.Draw(Snake.Position, Apple.Position);
 
-                Direction direction = KeyboardManager.GetKey();
-                Snake.Move(direction, Board.Width, Board.Height);
-                if(Snake.CheckForCollisionWithTail() == true)
-                {
-                    break;
-                }
+                // Snake Movement
+                Direction direction = KeyboardManager.GetDirection();
+                bool isBodyCollision = Snake.Move(direction, Board.Width, Board.Height);
+                if (isBodyCollision) break;
+                
 
-                if (Snake.SnakePos[0] == Apple.Position)
+                // Handle apple eat
+                if (Apple.CheckIfEaten(Snake.Position[0]))
                 {
-                    Apple.IsEaten = true;
                     Snake.IncreaseLength();
                     Score.IncreasePoints();
 
-                    Apple = new Apple(Board.Width, Board.Height, Snake.SnakePos);
+                    Apple = new Apple(Board.Width, Board.Height, Snake.Position);
                 }
 
                 Score.PrintScore(Board.Height);
-                Thread.Sleep(1000/16);
+                Thread.Sleep(1000 / FPS);
             }
 
-            Messages.GameOverMessage(Board.Width, Board.Height, Score.points);
+            Messages.GameOverMessage(Board.Width, Board.Height, Score.Points);
             Console.ReadLine();
         }
     }

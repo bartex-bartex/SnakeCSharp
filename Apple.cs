@@ -4,31 +4,41 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SnakeC_
+namespace SnakeGame
 {
     public class Apple
     {
         public Point Position { get; private set; }
-        public bool IsEaten { get; set; }
+        public bool IsEaten { get; private set; }
 
-        public Apple(int mapWidth, int mapHeight, List<Point> snakePos)
+        public Apple(int mapWidth, int mapHeight, List<Point> snakePosition)
         {
             IsEaten = false;
 
-            SpawnApple(mapWidth, mapHeight, snakePos);
+            SpawnApple(mapWidth, mapHeight, snakePosition);
         }
 
-        public void SpawnApple(int mapWidth, int mapHeight, List<Point> snakePos)
+        private void SpawnApple(int mapWidth, int mapHeight, List<Point> snakePosition)
         {
             Random rand = new Random();
-            Point applePos;
+            Point applePosition;
 
             do
             {
-                applePos = new Point(rand.Next(1, mapWidth - 2), rand.Next(1, mapHeight - 2));
-            } while (snakePos.Contains(applePos) == true);
+                applePosition = new Point(rand.Next(1, mapWidth - 2), rand.Next(1, mapHeight - 2));
+            } while (snakePosition.Contains(applePosition) != false);
 
-            Position = applePos;
+            Position = applePosition;
+        }
+
+        public bool CheckIfEaten(Point SnakeHeadPosition)
+        {
+            if(SnakeHeadPosition == Position)
+            {
+                IsEaten = true;
+                return true;
+            }
+            return false;
         }
     }
 }

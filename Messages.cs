@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SnakeC_
+namespace SnakeGame
 {
     public static class Messages
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SnakeC_
+namespace SnakeGame
 {
 
     public class Board
@@ -18,34 +18,31 @@ namespace SnakeC_
             Height = height;
         }
 
-        public void Draw(List<Point> snakePos, Point applePos)
+        public void Draw(List<Point> snakePosition, Point applePosition)
         {
-            // Draw Boundaries
-            Console.SetCursorPosition(0, 0);
-            for (int i = 0; i < Width; i++)
-            {
-                Console.Write("#");
-            }
-            Console.WriteLine();
-            for (int i = 0; i < Height - 2; i++)
-            {
-                Console.Write("#");
-                for (int j = 0; j < Width - 2; j++)
-                {
-                    Console.Write(" ");
-                }
-                Console.WriteLine("#");
-            }
-            for (int i = 0; i < Width; i++)
-            {
-                Console.Write("#");
-            }
+            Console.Clear(); // Always will be flickering
 
-            // Draw Snake
-            for (int i = 0; i < snakePos.Count; i++)
+            DrawBoard();
+
+            DrawSnake(snakePosition);
+
+            DrawApple(applePosition);
+        }
+
+        private static void DrawApple(Point applePosition)
+        {
+            Console.SetCursorPosition(applePosition.x, applePosition.y);
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.Write("@");
+            Console.BackgroundColor = ConsoleColor.Black;
+        }
+
+        private static void DrawSnake(List<Point> snakePosition)
+        {
+            for (int i = 0; i < snakePosition.Count; i++)
             {
-                Console.SetCursorPosition(snakePos[i].x, snakePos[i].y);
-                if(i == 0)
+                Console.SetCursorPosition(snakePosition[i].x, snakePosition[i].y);
+                if (i == 0)
                 {
                     Console.ForegroundColor = ConsoleColor.Blue;
                     Console.Write("O");
@@ -56,12 +53,28 @@ namespace SnakeC_
                     Console.Write("o");
                 }
             }
+        }
 
-            // Draw Apple
-            Console.SetCursorPosition(applePos.x, applePos.y);
-            Console.BackgroundColor = ConsoleColor.Red;
-            Console.Write("@");
-            Console.BackgroundColor = ConsoleColor.Black;
+        private void DrawBoard()
+        {
+            Console.SetCursorPosition(0, 0);
+            for (int i = 0; i < Width; i++)
+            {
+                Console.Write("#");
+            }
+
+            Console.WriteLine();
+            for (int i = 0; i < Height - 2; i++)
+            {
+                Console.Write("#");
+                Console.SetCursorPosition(Width - 1, i + 1);
+                Console.WriteLine("#");
+            }
+
+            for (int i = 0; i < Width; i++)
+            {
+                Console.Write("#");
+            }
         }
     }
 }
