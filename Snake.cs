@@ -178,5 +178,14 @@ namespace SnakeGame
         {
             Position.Add(Position[Position.Count - 1]);
         }
+        public Point GetSnakeHead()
+        {
+            return Position[0];
+        }
+
+        public Point GetSnakeTail()
+        {
+            return Position[^1];
+        }
     }
 }

@@ -18,13 +18,11 @@ namespace SnakeGame
             Height = height;
         }
 
-        public void Draw(List<Point> snakePosition, Point applePosition)
+        public void Draw(List<Point> snakePosition, Point previousSnakeTail, Point applePosition)
         {
-            Console.Clear(); // Always will be flickering
-
             DrawBoard();
 
-            DrawSnake(snakePosition);
+            DrawSnake(snakePosition, previousSnakeTail);
 
             DrawApple(applePosition);
         }
@@ -37,7 +35,7 @@ namespace SnakeGame
             Console.BackgroundColor = ConsoleColor.Black;
         }
 
-        private static void DrawSnake(List<Point> snakePosition)
+        private static void DrawSnake(List<Point> snakePosition, Point previousSnakeTail)
         {
             for (int i = 0; i < snakePosition.Count; i++)
             {
@@ -53,6 +51,9 @@ namespace SnakeGame
                     Console.Write("o");
                 }
             }
+            // Instead of redrawing whole Board just clear previous Snake tail
+            Console.SetCursorPosition(previousSnakeTail.x, previousSnakeTail.y);
+            Console.Write(" ");
         }
 
         private void DrawBoard()

@@ -30,9 +30,11 @@ namespace SnakeGame
 
         public void Start()
         {
+            Point previousSnakeTail = new Point(Snake.GetSnakeTail().x, Snake.GetSnakeTail().y);
             while (true)
             {
-                Board.Draw(Snake.Position, Apple.Position);
+                Board.Draw(Snake.Position, previousSnakeTail, Apple.Position);
+                previousSnakeTail = Snake.GetSnakeTail();
 
                 // Snake Movement
                 Direction direction = KeyboardManager.GetDirection();
@@ -41,7 +43,7 @@ namespace SnakeGame
                 
 
                 // Handle apple eat
-                if (Apple.CheckIfEaten(Snake.Position[0]))
+                if (Apple.CheckIfEaten(Snake.GetSnakeHead()))
                 {
                     Snake.IncreaseLength();
                     Score.IncreasePoints();
