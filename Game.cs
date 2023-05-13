@@ -55,7 +55,7 @@ namespace SnakeGame
                 Thread.Sleep(1000 / FPS);
             }
 
-            Messages.GameOverMessage(Board.Width, Board.Height, Score.Points);
+            Messages.GameOverMessage(Board.Width, Board.Height, Score.GetPoints());
             Console.ReadLine();
         }
     }

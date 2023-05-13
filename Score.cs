@@ -8,16 +8,21 @@ namespace SnakeGame
 {
     public class Score
     {
-        public int Points { get; private set; } = 0;
+        private int points = 0;
         public void PrintScore(int mapHeight)
         {
             Console.SetCursorPosition(0, mapHeight);
-            Console.Write($"Your score: {Points}");
+            Console.Write($"Your score: {points}");
         }
 
         public void IncreasePoints()
         {
-            Points++;
+            points++;
+        }
+
+        public int GetPoints()
+        {
+            return points;
         }
     }
 }

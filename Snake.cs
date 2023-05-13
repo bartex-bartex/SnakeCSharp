@@ -42,7 +42,7 @@ namespace SnakeGame
 
     public class Snake
     {
-        public List<Point> Position { get; private set; } = new List<Point>();
+        public List<Point> Position { get; private set; }
         private Direction currentDirection;
 
         public Snake(int mapWidth, int mapHeight)
@@ -52,7 +52,7 @@ namespace SnakeGame
             //Spawn snake head in the middle
             Position.Add(new Point(mapWidth / 2, mapHeight / 2));
 
-            //Initial movement
+            //Initiate movement
             currentDirection = Direction.up;
         }
 
@@ -182,7 +182,6 @@ namespace SnakeGame
         {
             return Position[0];
         }
-
         public Point GetSnakeTail()
         {
             return Position[^1];
