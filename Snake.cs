@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security;
 using System.Text;
@@ -18,22 +19,16 @@ namespace SnakeGame
             this.y = y;
         }
 
-        public static bool operator== (Point p1, Point p2)
+        public static bool operator ==(Point p1, Point p2)
         {
-            if(p1.x == p2.x && p1.y == p2.y)
-            {
-                return true;
-            }
-            return false;
+            return (p1.x == p2.x && p1.y == p2.y);
         }
+
 
         public static bool operator !=(Point p1, Point p2)
         {
-            if (p1.x != p2.x || p1.y != p2.y)
-            {
-                return true;
-            }
-            return false;
+            return (p1.x != p2.x || p1.y != p2.y);
+
         }
     }
 
@@ -42,6 +37,8 @@ namespace SnakeGame
 
     public class Snake
     {
+        public Point Head { get { return Position[0]; } }
+        public Point Tail { get { return Position[^1]; } }
         public List<Point> Position { get; private set; }
         private Direction currentDirection;
 
@@ -63,128 +60,96 @@ namespace SnakeGame
             switch (currentDirection)
             {
                 case Direction.up:
-                    UpdateSnakePositionList(Direction.up, mapWidth, mapHeight, 
+                    UpdatePosition(Direction.up, mapWidth, mapHeight, 
                         new Point(Position[0].x, mapHeight - 2), new Point(Position[0].x, Position[0].y - 1));
                     break;
+
                 case Direction.right:
-                    UpdateSnakePositionList(Direction.right, mapWidth, mapHeight,
+                    UpdatePosition(Direction.right, mapWidth, mapHeight,
                         new Point(1, Position[0].y), new Point(Position[0].x + 1, Position[0].y));
                     break;
+
                 case Direction.down:
-                    UpdateSnakePositionList(Direction.down, mapWidth, mapHeight,
+                    UpdatePosition(Direction.down, mapWidth, mapHeight,
                         new Point(Position[0].x, 1), new Point(Position[0].x, Position[0].y + 1));
                     break;
+
                 case Direction.left:
-                    UpdateSnakePositionList(Direction.left, mapWidth, mapHeight,
+                    UpdatePosition(Direction.left, mapWidth, mapHeight,
                         new Point(mapWidth - 2, Position[0].y), new Point(Position[0].x - 1, Position[0].y));
                     break;
+
                 default:
                     break;
             }
-            return CheckIfCollisionWithTail();
+            return IsCollisionWithTail();
         }
 
         private Direction UpdateCurrentDirection(Direction newDirection)
         {
-            if (newDirection != Direction.previousDirection)
-            {
-                if (Position.Count == 1)
-                { 
-                    return newDirection;
-                }
-                if (CheckIfOppositeDirection(newDirection) == true)
-                {
-                    return currentDirection;
-                }
-                else
-                {
-                    return newDirection;
-                }
-            }
-            else
-            {
-                return currentDirection;
-            }
+            // One line 'if' without brackets very readible
+
+            if (newDirection == Direction.previousDirection) return currentDirection;
+
+            if (Position.Count == 1) return newDirection;
+
+            return ChangedDirection(newDirection) ?
+                currentDirection : newDirection;
         }
 
-        private bool CheckIfOppositeDirection(Direction newDirection)
+        private bool ChangedDirection(Direction newDirection)
         {
-            if (currentDirection == Direction.left && newDirection == Direction.right ||
+            return (currentDirection == Direction.left && newDirection == Direction.right ||
                 currentDirection == Direction.right && newDirection == Direction.left ||
                 currentDirection == Direction.up && newDirection == Direction.down ||
-                currentDirection == Direction.down && newDirection == Direction.up)
-            {
-                return true;
-            }
-            return false;
+                currentDirection == Direction.down && newDirection == Direction.up);
         }
 
-        private bool CheckIfCollisionWithBoundary(Direction direction, int mapWidth, int mapHeight)
+        private bool IsCollisionWithBoundary(Direction direction, int mapWidth, int mapHeight)
         {
             switch (direction)
             {
                 case Direction.up:
-                    if (Position[0].y - 1 == 0)
-                    {
-                        return true;
-                    }
-                    return false;
+                    return (Position[0].y - 1 == 0);
+
                 case Direction.right:
-                    if (Position[0].x + 1 == mapWidth - 1)
-                    {
-                        return true;
-                    }
-                    return false;
+                    return (Position[0].x + 1 == mapWidth - 1);
+
                 case Direction.down:
-                    if (Position[0].y + 1 == mapHeight - 1)
-                    {
-                        return true;
-                    }
-                    return false;
+                    return (Position[0].y + 1 == mapHeight - 1);
+
                 case Direction.left:
-                    if (Position[0].x - 1 == 0)
-                    {
-                        return true;
-                    }
-                    return false;
+                    return (Position[0].x - 1 == 0);
+
                 default:
                     return false;
             }
         }
 
-        private void UpdateSnakePositionList(Direction direction, int mapWidth, int mapHeight, Point newHeadPointIfBorderHit, Point newHeadPointIfNormalMove)
+        private void UpdatePosition(Direction direction, int mapWidth, int mapHeight, Point newHeadPointIfBorderHit, Point newHeadPointIfNormalMove)
         {
-            if (CheckIfCollisionWithBoundary(direction, mapWidth, mapHeight) == true)
+            if (IsCollisionWithBoundary(direction, mapWidth, mapHeight))
             {
                 Position.Insert(0, newHeadPointIfBorderHit);
             }
+
             else
             {
                 Position.Insert(0, newHeadPointIfNormalMove);
             }
+
             Position.RemoveAt(Position.Count - 1);
         }
 
-        private bool CheckIfCollisionWithTail()
+        private bool IsCollisionWithTail()
         {
-            if (Position.Skip(1).Contains(Position[0]))
-            {
-                return true;
-            }
-            return false;
+            return (Position.Skip(1).Contains(Position[0]));
+
         }
         
         public void IncreaseLength()
         {
             Position.Add(Position[Position.Count - 1]);
-        }
-        public Point GetSnakeHead()
-        {
-            return Position[0];
-        }
-        public Point GetSnakeTail()
-        {
-            return Position[^1];
         }
     }
 }

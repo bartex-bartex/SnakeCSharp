@@ -8,10 +8,11 @@ namespace SnakeGame
 {
     public class Game
     {
-        public Board Board { get; set; }
-        public Snake Snake { get; set; }
-        public Apple Apple { get; set; }
-        public Score Score { get; set; }
+        // Never publicly expose internal state -> private/protected set;
+        public Board Board { get; private set; }
+        public Snake Snake { get; private set; }
+        public Apple Apple { get; private set; }
+        public Score Score { get; private set; }
 
         private const int scoreTextHeight = 1;
         private const int FPS = 16; 
@@ -30,20 +31,21 @@ namespace SnakeGame
 
         public void Start()
         {
-            Point previousSnakeTail = new Point(Snake.GetSnakeTail().x, Snake.GetSnakeTail().y);
-            while (true)
+            Point previousSnakeTail = new Point(Snake.Tail.x, Snake.Tail.y);
+            bool isBodyCollision = false;
+
+            while (! isBodyCollision)
             {
                 Board.Draw(Snake.Position, previousSnakeTail, Apple.Position);
-                previousSnakeTail = Snake.GetSnakeTail();
+                previousSnakeTail = Snake.Tail;
 
                 // Snake Movement
                 Direction direction = KeyboardManager.GetDirection();
-                bool isBodyCollision = Snake.Move(direction, Board.Width, Board.Height);
-                if (isBodyCollision) break;
+                isBodyCollision = Snake.Move(direction, Board.Width, Board.Height);
                 
 
                 // Handle apple eat
-                if (Apple.CheckIfEaten(Snake.GetSnakeHead()))
+                if (Apple.IsEaten(Snake.Head))
                 {
                     Snake.IncreaseLength();
                     Score.IncreasePoints();

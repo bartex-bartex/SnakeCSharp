@@ -21,15 +21,19 @@ namespace SnakeGame
                     case ConsoleKey.D:
                     case ConsoleKey.RightArrow:
                         return Direction.right;
+
                     case ConsoleKey.S:
                     case ConsoleKey.DownArrow:
                         return Direction.down;
+
                     case ConsoleKey.A:
                     case ConsoleKey.LeftArrow:
                         return Direction.left;
+
                     case ConsoleKey.W:
                     case ConsoleKey.UpArrow:
                         return Direction.up;
+
                     default:
                         return Direction.previousDirection;
                 }
